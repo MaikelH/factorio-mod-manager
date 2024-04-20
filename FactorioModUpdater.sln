@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FactorioModUpdater", "FactorioModUpdater\FactorioModUpdater.csproj", "{0ECD4C09-CFAB-44C8-97F2-E8FBE5F032D3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FactorioLib", "FactorioLib\FactorioLib.csproj", "{F1ED78DA-7A48-44D7-974B-3F1FEC25B776}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FactorioLib.Tests", "FactorioLib.Tests\FactorioLib.Tests.csproj", "{65C76FF4-0B6A-49CF-8CD6-6B5C19030CC4}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0ECD4C09-CFAB-44C8-97F2-E8FBE5F032D3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0ECD4C09-CFAB-44C8-97F2-E8FBE5F032D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0ECD4C09-CFAB-44C8-97F2-E8FBE5F032D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0ECD4C09-CFAB-44C8-97F2-E8FBE5F032D3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F1ED78DA-7A48-44D7-974B-3F1FEC25B776}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F1ED78DA-7A48-44D7-974B-3F1FEC25B776}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F1ED78DA-7A48-44D7-974B-3F1FEC25B776}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F1ED78DA-7A48-44D7-974B-3F1FEC25B776}.Release|Any CPU.Build.0 = Release|Any CPU
+		{65C76FF4-0B6A-49CF-8CD6-6B5C19030CC4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{65C76FF4-0B6A-49CF-8CD6-6B5C19030CC4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{65C76FF4-0B6A-49CF-8CD6-6B5C19030CC4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{65C76FF4-0B6A-49CF-8CD6-6B5C19030CC4}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
