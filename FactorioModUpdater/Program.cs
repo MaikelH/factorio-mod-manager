@@ -32,6 +32,7 @@ class Program
         if (dir == "")
         {
             Console.Error.WriteLine("[!] ERROR --dir option or FACTORIO_DIR environment variable must be set");
+            return;
         }
         
         FactorioMods mods = new FactorioMods(dir);
