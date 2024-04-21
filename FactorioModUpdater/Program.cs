@@ -12,7 +12,7 @@ class Program
             getDefaultValue: GetFactorioModDir);
 
         var rootCommand = new RootCommand("Factorio mod utility");
-        var modsCommand = new Command("mods", "Manipulate mods");
+        var modsCommand = new Command("mod", "Manipulate mods");
 
         var updateModsCommand = new Command("update");
         var listModsCommand = new Command("list") { dirOption };
