@@ -84,7 +84,7 @@ public class FactorioMods
         var modList = ReadModList();
 
         var modEntries = new Dictionary<string, Mod>();
-        
+
         foreach (var listEntry in modList)
         {
             modEntries[listEntry.Name] = new Mod()
@@ -93,7 +93,7 @@ public class FactorioMods
                 Name = listEntry.Name
             };
         }
-        
+
         foreach (var modFile in modFiles)
         {
             if (modEntries.ContainsKey(modFile.Name))

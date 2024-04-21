@@ -34,7 +34,7 @@ class Program
             Console.Error.WriteLine("[!] ERROR --dir option or FACTORIO_DIR environment variable must be set");
             return;
         }
-        
+
         FactorioMods mods = new FactorioMods(dir);
         var listModFiles = mods.List();
 
@@ -49,6 +49,7 @@ class Program
         {
             table.AddRow(listModFile.Name, listModFile.LatestVersion, listModFile.Enabled, listModFile.Present);
         }
+
         table.Write(Format.Minimal);
     }
 

@@ -9,7 +9,6 @@ namespace FactorioLib.Tests;
 [TestSubject(typeof(FactorioMods))]
 public class FactorioModsTest
 {
-
     [TestMethod]
     public void TestGetMods()
     {
@@ -24,7 +23,7 @@ public class FactorioModsTest
     public void TestListMethod()
     {
         var mods = new FactorioMods("./mods");
-        
+
         var list = mods.List();
 
         list.Should().HaveCountGreaterThan(2);

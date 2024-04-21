@@ -9,7 +9,6 @@ namespace FactorioLib.Tests;
 [TestSubject(typeof(ModPortal))]
 public class ModPortalTest
 {
-
     [TestMethod]
     public async Task TestGetMods()
     {

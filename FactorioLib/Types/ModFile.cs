@@ -9,7 +9,7 @@ public class ModFile
 {
     public string Name { get; set; }
     public string Version { get; set; }
-    
+
     public SemVersion SemVersion { get; set; }
     public string Path { get; set; }
     public long Size { get; set; }

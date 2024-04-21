@@ -7,6 +7,5 @@ namespace FactorioLib.Types;
 /// </summary>
 public class ModListFile
 {
-    [JsonPropertyName("mods")]
-    public IEnumerable<ModListEntry> Mods { get; set; }
+    [JsonPropertyName("mods")] public IEnumerable<ModListEntry> Mods { get; set; }
 }
