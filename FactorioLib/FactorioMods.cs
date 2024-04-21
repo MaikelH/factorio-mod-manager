@@ -1,5 +1,6 @@
 using System.Text.Json;
 using FactorioLib.Types;
+using Semver;
 
 namespace FactorioLib;
 
@@ -9,7 +10,7 @@ public class FactorioMods
 
     public FactorioMods(string directory)
     {
-        if (!Directory.Exists(_directory))
+        if (!Directory.Exists(directory))
         {
             throw new Exception($"Directory {_directory} does not exist");
         }
@@ -41,6 +42,7 @@ public class FactorioMods
             var fileInfo = new FileInfo(file);
             mod.Name = strings[0];
             mod.Version = strings[1];
+            mod.SemVersion = SemVersion.Parse(mod.Version, SemVersionStyles.Any);
             mod.Size = fileInfo.Length;
 
             mods.Add(mod);
@@ -56,7 +58,7 @@ public class FactorioMods
     /// <exception cref="Exception"></exception>
     public IEnumerable<ModListEntry> ReadModList()
     {
-        var modfilePath = _directory + Path.PathSeparator + "mod-list.json";
+        var modfilePath = _directory + Path.DirectorySeparatorChar + "mod-list.json";
         if (!File.Exists(modfilePath))
         {
             throw new Exception($"Mod list file on location {modfilePath} cannot be found.");
@@ -97,6 +99,11 @@ public class FactorioMods
             if (modEntries.ContainsKey(modFile.Name))
             {
                 modEntries[modFile.Name].Files.Add(modFile);
+                modEntries[modFile.Name].Present = true;
+                if (modFile.SemVersion.ComparePrecedenceTo(modEntries[modFile.Name].LatestVersion) >= 0)
+                {
+                    modEntries[modFile.Name].LatestVersion = modFile.SemVersion;
+                }
             }
             else
             {
@@ -105,6 +112,7 @@ public class FactorioMods
                     Name = modFile.Name,
                     Files = new List<ModFile> { modFile },
                     Enabled = false,
+                    LatestVersion = modFile.SemVersion
                 };
             }
         }

@@ -35,11 +35,9 @@ class Program
         }
         
         FactorioMods mods = new FactorioMods(dir);
-        
-        Console.WriteLine($"[*] Scanning for mods in {dir}");
-        var listModFiles = mods.ListModFiles();
+        var listModFiles = mods.List();
 
-        var table = new ConsoleTable("Name", "Version")
+        var table = new ConsoleTable("Name", "Latest Version", "Enabled", "Present")
         {
             Options =
             {
@@ -48,15 +46,14 @@ class Program
         };
         foreach (var listModFile in listModFiles)
         {
-            table.AddRow(listModFile.Name, listModFile.Version);
+            table.AddRow(listModFile.Name, listModFile.LatestVersion, listModFile.Enabled, listModFile.Present);
         }
-        
         table.Write(Format.Minimal);
     }
 
     private static string GetFactorioModDir()
     {
-        var modDir = Environment.GetEnvironmentVariable("FACTORIO_DIR");
+        var modDir = Environment.GetEnvironmentVariable("FACTORIO_MOD_DIR");
         if (modDir != null)
         {
             return modDir;

@@ -17,5 +17,20 @@
   <ItemGroup>
     <ProjectReference Include="..\FactorioLib\FactorioLib.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <None Update="mods\aai-signal-transmission_0.4.7.zip">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="mods\aai-vehicles-ironclad_0.6.8.zip">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="mods\mod-list.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="mods\mod-settings.dat">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
   
 </Project>

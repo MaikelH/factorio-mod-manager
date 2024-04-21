@@ -19,4 +19,14 @@ public class FactorioModsTest
 
         list.Should().HaveCount(2);
     }
+
+    [TestMethod]
+    public void TestListMethod()
+    {
+        var mods = new FactorioMods("./mods");
+        
+        var list = mods.List();
+
+        list.Should().HaveCountGreaterThan(2);
+    }
 }
