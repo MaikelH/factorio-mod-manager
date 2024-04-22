@@ -2,7 +2,7 @@ using System.Text.Json.Serialization;
 
 namespace FactorioLib.Types;
 
-public class LatestRelease
+public class Release
 {
     [JsonPropertyName("download_url")] public string DownloadUrl { get; set; }
 

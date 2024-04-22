@@ -18,5 +18,8 @@ public class Result
 
     [JsonPropertyName("score")] public double Score { get; set; }
 
-    [JsonPropertyName("latest_release")] public LatestRelease LatestRelease { get; set; }
+    [JsonPropertyName("latest_release")] public Release? LatestRelease { get; set; }
+    
+    [JsonPropertyName("releases")]
+    public IEnumerable<Release> Releases { get; set; } = Array.Empty<Release>(); 
 }

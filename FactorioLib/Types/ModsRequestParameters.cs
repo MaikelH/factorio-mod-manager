@@ -15,7 +15,7 @@ public class ModsRequestParameters
     
     public bool ReturnAll { get; set; } = false;
 
-    public NameValueCollection GetQueryParameters()
+    public string GetQueryString()
     {
         var queryParams = HttpUtility.ParseQueryString("");
 
@@ -41,13 +41,19 @@ public class ModsRequestParameters
 
         queryParams["sort"] =Sort.ToCustomString();
         queryParams["sort_order"] = SortOrder.ToCustomString();
+        queryParams["version"] = Version.ToCustomString();
+        string queryString = queryParams.ToString();
+        if (queryString == null)
+        {
+            return "";
+        }
+
+        // Namelist is a special case because the comma separated list cannot be URL encoded (encodes the comma character).
         if (NameList.Length > 0)
         {
-            queryParams["name_list"] = string.Join(",", NameList);
+            queryString += "&namelist=" + string.Join(",", NameList);
         }
-        queryParams["version"] = Version.ToCustomString();
-
-        return queryParams;
+        return queryString;
     }
 }
 

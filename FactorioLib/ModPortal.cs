@@ -24,8 +24,8 @@ public class ModPortal
     public async Task<ModListResponse> GetMods(ModsRequestParameters parameters)
     {
         var uriBuilder = new UriBuilder(_baseUrl);
-        var queryParams = parameters.GetQueryParameters();
-        uriBuilder.Query = queryParams.ToString();
+        var queryString = parameters.GetQueryString();
+        uriBuilder.Query = queryString;
 
         var response = await _httpClient.GetFromJsonAsync<ModListResponse>(uriBuilder.ToString());
         if (response != null)

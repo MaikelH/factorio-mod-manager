@@ -36,9 +36,9 @@ class Program
         }
 
         FactorioMods mods = new FactorioMods(dir);
-        var listModFiles = await mods.List();
+        var listModFiles = await mods.List(true);
 
-        var table = new ConsoleTable("Name", "Latest Version", "Enabled", "Present")
+        var table = new ConsoleTable("Name", "Local Version", "Latest Version", "Enabled", "Present")
         {
             Options =
             {
@@ -47,7 +47,7 @@ class Program
         };
         foreach (var listModFile in listModFiles)
         {
-            table.AddRow(listModFile.Name, listModFile.LatestVersion, listModFile.Enabled, listModFile.Present);
+            table.AddRow(listModFile.Name, listModFile.LocalVersion, listModFile.LatestVersion, listModFile.Enabled, listModFile.Present);
         }
 
         table.Write(Format.Minimal);

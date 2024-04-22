@@ -148,7 +148,7 @@ public class FactorioMods
         {
             if (modEntries.ContainsKey(mod.Name))
             {
-                modEntries[mod.Name].LatestVersion = mod.LatestRelease.Version;
+                modEntries[mod.Name].LatestVersion = mod.Releases.Last().Version;
             }
         }
 
