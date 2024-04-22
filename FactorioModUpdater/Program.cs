@@ -1,6 +1,6 @@
 ﻿using System.CommandLine;
-using ConsoleTables;
 using FactorioLib;
+using Spectre.Console;
 
 namespace FactorioModUpdater;
 
@@ -38,19 +38,50 @@ class Program
         FactorioMods mods = new FactorioMods(dir);
         var listModFiles = await mods.List(true);
 
-        var table = new ConsoleTable("Name", "Local Version", "Latest Version", "Enabled", "Present")
-        {
-            Options =
-            {
-                NumberAlignment = Alignment.Right
-            }
-        };
+        var table = new Table();
+        table.AddColumn("Name");
+        table.AddColumn("Local Version");
+        table.AddColumn("Latest Version");
+        table.AddColumn("Enabled");
+        table.AddColumn("Present");
+
+
         foreach (var listModFile in listModFiles)
         {
-            table.AddRow(listModFile.Name, listModFile.LocalVersion, listModFile.LatestVersion, listModFile.Enabled, listModFile.Present);
+            string[] rowData = new string[5];
+            
+            rowData[0] = listModFile.Name;
+            if (listModFile.LocalVersion == null)
+            {
+                rowData[1] = "[maroon]N/A[/]";
+            }
+            else
+            {
+                rowData[1] = listModFile.LocalVersion.ToString();
+            }
+            
+            
+            if (listModFile.LocalVersion != null && listModFile.LatestVersion != null)
+            {
+                if (listModFile.LocalVersion.ComparePrecedenceTo(listModFile.LatestVersion) < 0)
+                {
+                    rowData[2] = $"[green]{listModFile.LatestVersion}[/]";
+                }
+                else
+                {
+                    rowData[2] = listModFile.LatestVersion?.ToString() ?? string.Empty;
+                }
+            }
+            else
+            {
+                rowData[2] = listModFile.LatestVersion?.ToString() ?? string.Empty;
+            }
+            rowData[3] = listModFile.Enabled.ToString();
+            rowData[4] = listModFile.Present.ToString();
+            table.AddRow(rowData);
         }
 
-        table.Write(Format.Minimal);
+        AnsiConsole.Write(table);
     }
 
     private static string GetFactorioModDir()

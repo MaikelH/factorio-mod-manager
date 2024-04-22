@@ -5,8 +5,8 @@ namespace FactorioLib.Types;
 public class Mod
 {
     public string Name { get; set; }
-    public SemVersion LatestVersion { get; set; }
-    public SemVersion LocalVersion { get; set; }
+    public SemVersion? LatestVersion { get; set; }
+    public SemVersion? LocalVersion { get; set; }
     public bool Enabled { get; set; }
 
     /// <summary>
