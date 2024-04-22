@@ -12,6 +12,12 @@ public class FactorioMods
 {
     private readonly string _directory;
 
+    private readonly Dictionary<string, bool> _blackList = new Dictionary<string, bool>
+    {
+        { "base", true },
+        { "core", true }
+    };
+
     /// <summary>
     /// Initializes a new instance of the FactorioMods class.
     /// </summary>
