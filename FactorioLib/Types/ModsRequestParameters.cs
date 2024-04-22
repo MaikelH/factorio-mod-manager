@@ -12,6 +12,8 @@ public class ModsRequestParameters
     public SortOrder SortOrder { get; set; } = SortOrder.Desc;
     public String[] NameList { get; set; } = [];
     public FactorioVersion Version { get; set; } = FactorioVersion.V1_1;
+    
+    public bool ReturnAll { get; set; } = false;
 
     public NameValueCollection GetQueryParameters()
     {
@@ -25,10 +27,18 @@ public class ModsRequestParameters
         {
             queryParams["page"] = Page.ToString();
         }
-        if(PageSize != null)
+        if(ReturnAll)
         {
-            queryParams["page_size"] = PageSize.ToString();
+            queryParams["page_size"] = "max";
         }
+        else
+        {
+            if(PageSize != null)
+            {
+                queryParams["page_size"] = PageSize.ToString();
+            }
+        }
+
         queryParams["sort"] =Sort.ToCustomString();
         queryParams["sort_order"] = SortOrder.ToCustomString();
         if (NameList.Length > 0)

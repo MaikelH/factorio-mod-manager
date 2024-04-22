@@ -91,7 +91,7 @@ public class FactorioMods
     /// Lists all the mods in the directory including version information and shows if they are enabled.
     /// </summary>
     /// <returns>An IEnumerable of Mod objects representing the mods.</returns>
-    public IEnumerable<Mod> List()
+    public async Task<IEnumerable<Mod>> List(bool checkForUpdates = false)
     {
         var modFiles = ListModFiles();
         var modList = ReadModList();
@@ -115,7 +115,7 @@ public class FactorioMods
                 modEntries[modFile.Name].Present = true;
                 if (modFile.SemVersion.ComparePrecedenceTo(modEntries[modFile.Name].LatestVersion) >= 0)
                 {
-                    modEntries[modFile.Name].LatestVersion = modFile.SemVersion;
+                    modEntries[modFile.Name].LocalVersion = modFile.SemVersion;
                 }
             }
             else
@@ -125,8 +125,30 @@ public class FactorioMods
                     Name = modFile.Name,
                     Files = new List<ModFile> { modFile },
                     Enabled = false,
-                    LatestVersion = modFile.SemVersion
+                    LocalVersion = modFile.SemVersion
                 };
+            }
+        }
+
+        if (!checkForUpdates)
+        {
+            return modEntries.Values;
+        }
+        
+        // Check for mod updates
+        ModPortal modPortal = new();
+        ModsRequestParameters parameters = new()
+        {
+            NameList = modEntries.Keys.ToArray(),
+            ReturnAll = true
+        };
+
+        var mods = await modPortal.GetMods(parameters);
+        foreach (var mod in mods.Results)
+        {
+            if (modEntries.ContainsKey(mod.Name))
+            {
+                modEntries[mod.Name].LatestVersion = mod.LatestRelease.Version;
             }
         }
 

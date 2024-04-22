@@ -4,6 +4,10 @@ using FactorioLib.Types;
 
 namespace FactorioLib;
 
+/// <summary>
+/// The ModPortal class is responsible for interacting with the Factorio mod portal API.
+/// It provides functionality to retrieve mod information using various parameters.
+/// </summary>
 public class ModPortal
 {
     private readonly Uri _baseUrl = new("https://mods.factorio.com/api/mods");

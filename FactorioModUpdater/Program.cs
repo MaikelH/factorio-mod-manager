@@ -27,7 +27,7 @@ class Program
         return rootCommand.InvokeAsync(args).Result;
     }
 
-    private static void ListMods(string dir)
+    private static async Task ListMods(string dir)
     {
         if (dir == "")
         {
@@ -36,7 +36,7 @@ class Program
         }
 
         FactorioMods mods = new FactorioMods(dir);
-        var listModFiles = mods.List();
+        var listModFiles = await mods.List();
 
         var table = new ConsoleTable("Name", "Latest Version", "Enabled", "Present")
         {
