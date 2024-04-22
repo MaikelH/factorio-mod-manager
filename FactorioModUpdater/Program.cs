@@ -11,8 +11,8 @@ class Program
     {
         var dirOption = new Option<String>(name: "--dir", description: "Factorio mod directory",
             getDefaultValue: GetFactorioModDir);
-        var userNameOption = new Option<String>(name: "--user", description: "Username for Factorio mod portal");
-        var tokenOption = new Option<String>(name: "--token", description: "Token for Factorio mod portal");
+        var userNameOption = new Option<String>(name: "--user", description: "Username for Factorio mod portal", getDefaultValue: GetUsername);
+        var tokenOption = new Option<String>(name: "--token", description: "Token for Factorio mod portal", getDefaultValue: GetToken);
 
         var rootCommand = new RootCommand("Factorio mod utility");
         rootCommand.AddGlobalOption(dirOption);
@@ -28,10 +28,8 @@ class Program
         modsCommand.AddCommand(listModsCommand);
 
         rootCommand.AddCommand(modsCommand);
-        updateModsCommand.SetHandler(() => { Console.WriteLine("Mods command executed"); });
-
         listModsCommand.SetHandler(ListMods, dirOption);
-        listModsCommand.SetHandler(UpdateMods, dirOption, userNameOption, tokenOption);
+        updateModsCommand.SetHandler(UpdateMods, dirOption, userNameOption, tokenOption);
 
         return rootCommand.InvokeAsync(args).Result;
     }
@@ -114,14 +112,20 @@ class Program
             return;
         }
 
-        FactorioMods factorioMods = new FactorioMods(dir);
+        FactorioMods factorioMods = new FactorioMods(dir, username, token);
         var mods = await factorioMods.List(true);
 
         var modsToUpdate = mods.Where(x => x.LocalVersion != null && x.LatestVersion != null)
-            .Where(x => x.LocalVersion!.ComparePrecedenceTo(x.LatestVersion) < 0);
+            .Where(x => x.LocalVersion!.ComparePrecedenceTo(x.LatestVersion) < 0)
+            .ToArray();
         
-        AnsiConsole.WriteLine($"[green]Updating {modsToUpdate.Count()} mods[/]");
+        AnsiConsole.WriteLine($"[green]Updating {modsToUpdate.Length} mod(s)[/]");
         
+        foreach (var mod in modsToUpdate)
+        {
+            AnsiConsole.WriteLine($"[green]Updating {mod.Name} from {mod.LocalVersion} to {mod.LatestVersion}[/]");
+            // await factorioMods.UpdateMod(mod, mod.LatestVersion);
+        }
     }
 
     private static string GetFactorioModDir()

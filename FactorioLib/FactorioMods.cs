@@ -10,7 +10,10 @@ namespace FactorioLib;
 /// </summary>
 public class FactorioMods
 {
+    private readonly string _username;
+    private readonly string _token;
     private readonly string _directory;
+    private readonly bool _authenticated;
 
     /// <summary>
     /// Initializes a new instance of the FactorioMods class.
@@ -24,6 +27,13 @@ public class FactorioMods
         }
 
         _directory = directory;
+    }
+
+    public FactorioMods(string directory, string username, string token) : this(directory)
+    {
+        _username = username;
+        _token = token;
+        _authenticated = true;
     }
 
     /// <summary>
@@ -153,5 +163,10 @@ public class FactorioMods
         }
 
         return modEntries.Values;
+    }
+
+    public async Task UpdateMod(string modName, SemVersion? modLatestVersion)
+    {
+        throw new NotImplementedException();
     }
 }
