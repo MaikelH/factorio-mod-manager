@@ -4,10 +4,18 @@ using Semver;
 
 namespace FactorioLib;
 
+/// <summary>
+/// The FactorioMods class is responsible for managing and manipulating Factorio mods.
+/// It provides functionalities such as listing mod files, reading mod list, and listing mods.
+/// </summary>
 public class FactorioMods
 {
     private readonly string _directory;
 
+    /// <summary>
+    /// Initializes a new instance of the FactorioMods class.
+    /// </summary>
+    /// <param name="directory">The directory where the Factorio mods are located.</param>
     public FactorioMods(string directory)
     {
         if (!Directory.Exists(directory))
@@ -18,6 +26,10 @@ public class FactorioMods
         _directory = directory;
     }
 
+    /// <summary>
+    /// Lists all the mod files in the directory.
+    /// </summary>
+    /// <returns>An IEnumerable of ModFile objects representing the mod files.</returns>
     public IEnumerable<ModFile> ListModFiles()
     {
         var files = Directory.GetFiles(_directory);
@@ -76,8 +88,9 @@ public class FactorioMods
     }
 
     /// <summary>
-    /// List lists all the mods in the directory including version information and shows if they are enabled.
+    /// Lists all the mods in the directory including version information and shows if they are enabled.
     /// </summary>
+    /// <returns>An IEnumerable of Mod objects representing the mods.</returns>
     public IEnumerable<Mod> List()
     {
         var modFiles = ListModFiles();

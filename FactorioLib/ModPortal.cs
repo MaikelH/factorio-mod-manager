@@ -1,4 +1,5 @@
 ﻿using System.Net.Http.Json;
+using System.Web;
 using FactorioLib.Types;
 
 namespace FactorioLib;
@@ -16,9 +17,13 @@ public class ModPortal
         };
     }
     
-    public async Task<ModListResponse> GetMods()
+    public async Task<ModListResponse> GetMods(ModsRequestParameters parameters)
     {
-        var response = await _httpClient.GetFromJsonAsync<ModListResponse>("");
+        var uriBuilder = new UriBuilder(_baseUrl);
+        var queryParams = parameters.GetQueryParameters();
+        uriBuilder.Query = queryParams.ToString();
+
+        var response = await _httpClient.GetFromJsonAsync<ModListResponse>(uriBuilder.ToString());
         if (response != null)
         {
             return response;

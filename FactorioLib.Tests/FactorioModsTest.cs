@@ -12,7 +12,7 @@ public class FactorioModsTest
     [TestMethod]
     public void TestGetMods()
     {
-        var mods = new FactorioMods("/home/maikel/RiderProjects/FactorioModUpdater/FactorioLib.Tests/mods");
+        var mods = new FactorioMods("./mods");
 
         var list = mods.ListModFiles();
 
