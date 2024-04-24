@@ -1,5 +1,6 @@
 ﻿using System.CommandLine;
 using FactorioLib;
+using FactorioLib.Types;
 using Spectre.Console;
 
 namespace FactorioModUpdater;
@@ -10,19 +11,25 @@ class Program
     {
         var dirOption = new Option<String>(name: "--dir", description: "Factorio mod directory",
             getDefaultValue: GetFactorioModDir);
+        var userNameOption = new Option<String>(name: "--user", description: "Username for Factorio mod portal", getDefaultValue: GetUsername);
+        var tokenOption = new Option<String>(name: "--token", description: "Token for Factorio mod portal", getDefaultValue: GetToken);
 
         var rootCommand = new RootCommand("Factorio mod utility");
+        rootCommand.AddGlobalOption(dirOption);
+
         var modsCommand = new Command("mod", "Manipulate mods");
 
         var updateModsCommand = new Command("update");
-        var listModsCommand = new Command("list") { dirOption };
+        updateModsCommand.AddOption(userNameOption);
+        updateModsCommand.AddOption(tokenOption);
+
+        var listModsCommand = new Command("list");
         modsCommand.AddCommand(updateModsCommand);
         modsCommand.AddCommand(listModsCommand);
 
         rootCommand.AddCommand(modsCommand);
-        updateModsCommand.SetHandler(() => { Console.WriteLine("Mods command executed"); });
-
         listModsCommand.SetHandler(ListMods, dirOption);
+        updateModsCommand.SetHandler(UpdateMods, dirOption, userNameOption, tokenOption);
 
         return rootCommand.InvokeAsync(args).Result;
     }
@@ -49,7 +56,7 @@ class Program
         foreach (var listModFile in listModFiles)
         {
             string[] rowData = new string[5];
-            
+
             rowData[0] = listModFile.Name;
             if (listModFile.LocalVersion == null)
             {
@@ -59,8 +66,8 @@ class Program
             {
                 rowData[1] = listModFile.LocalVersion.ToString();
             }
-            
-            
+
+
             if (listModFile.LocalVersion != null && listModFile.LatestVersion != null)
             {
                 if (listModFile.LocalVersion.ComparePrecedenceTo(listModFile.LatestVersion) < 0)
@@ -76,6 +83,7 @@ class Program
             {
                 rowData[2] = listModFile.LatestVersion?.ToString() ?? string.Empty;
             }
+
             rowData[3] = listModFile.Enabled.ToString();
             rowData[4] = listModFile.Present.ToString();
             table.AddRow(rowData);
@@ -84,12 +92,70 @@ class Program
         AnsiConsole.Write(table);
     }
 
+    private static async Task UpdateMods(string dir, string username, string token)
+    {
+        if (dir == "")
+        {
+            AnsiConsole.WriteLine("[red]ERROR --dir option or FACTORIO_DIR environment variable must be set[/]");
+            return;
+        }
+
+        if (username == "")
+        {
+            AnsiConsole.WriteLine("[red]ERROR --user option or FACTORIO_USER environment variable must be set[/]");
+            return;
+        }
+
+        if (token == "")
+        {
+            AnsiConsole.WriteLine("[red]ERROR --token option or FACTORIO_TOKEN environment variable must be set[/]");
+            return;
+        }
+
+        FactorioMods factorioMods = new FactorioMods(dir, username, token);
+        var mods = await factorioMods.List(true);
+
+        var modsToUpdate = mods.Where(x => x.LocalVersion != null && x.LatestVersion != null)
+            .Where(x => x.LocalVersion!.ComparePrecedenceTo(x.LatestVersion) < 0)
+            .ToArray();
+        
+        AnsiConsole.WriteLine($"[green]Updating {modsToUpdate.Length} mod(s)[/]");
+        
+        foreach (var mod in modsToUpdate)
+        {
+            AnsiConsole.WriteLine($"[green]Updating {mod.Name} from {mod.LocalVersion} to {mod.LatestVersion}[/]");
+            // await factorioMods.UpdateMod(mod, mod.LatestVersion);
+        }
+    }
+
     private static string GetFactorioModDir()
     {
         var modDir = Environment.GetEnvironmentVariable("FACTORIO_MOD_DIR");
         if (modDir != null)
         {
             return modDir;
+        }
+
+        return "";
+    }
+
+    private static string GetUsername()
+    {
+        var username = Environment.GetEnvironmentVariable("FACTORIO_USER");
+        if (username != null)
+        {
+            return username;
+        }
+
+        return "";
+    }
+
+    private static string GetToken()
+    {
+        var token = Environment.GetEnvironmentVariable("FACTORIO_TOKEN");
+        if (token != null)
+        {
+            return token;
         }
 
         return "";
