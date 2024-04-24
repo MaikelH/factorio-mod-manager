@@ -2,7 +2,7 @@ using System.Text.Json.Serialization;
 
 namespace FactorioLib.Types;
 
-public class Result
+public class ModPortalMod
 {
     [JsonPropertyName("name")] public string Name { get; set; }
 

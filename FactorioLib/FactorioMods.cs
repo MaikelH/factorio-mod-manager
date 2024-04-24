@@ -14,6 +14,7 @@ public class FactorioMods
     private readonly string _token;
     private readonly string _directory;
     private readonly bool _authenticated;
+    private ModPortal _modPortal;
 
     private readonly Dictionary<string, bool> _blackList = new Dictionary<string, bool>
     {
@@ -33,6 +34,7 @@ public class FactorioMods
         }
 
         _directory = directory;
+        _modPortal = new ModPortal();
     }
 
     public FactorioMods(string directory, string username, string token) : this(directory)
@@ -40,6 +42,7 @@ public class FactorioMods
         _username = username;
         _token = token;
         _authenticated = true;
+        _modPortal.SetAuthentication(username, token);
     }
 
     /// <summary>
@@ -152,14 +155,13 @@ public class FactorioMods
         }
         
         // Check for mod updates
-        ModPortal modPortal = new();
         ModsRequestParameters parameters = new()
         {
             NameList = modEntries.Keys.ToArray(),
             ReturnAll = true
         };
 
-        var mods = await modPortal.GetMods(parameters);
+        var mods = await _modPortal.GetMods(parameters);
         foreach (var mod in mods.Results)
         {
             if (modEntries.ContainsKey(mod.Name))
@@ -173,6 +175,12 @@ public class FactorioMods
 
     public async Task UpdateMod(string modName, SemVersion? modLatestVersion)
     {
-        throw new NotImplementedException();
+        string? version = null;
+        if (modLatestVersion != null)
+        {
+            version = modLatestVersion.ToString();
+        }
+        
+        await _modPortal.Download(modName, version, _directory);
     }
 }

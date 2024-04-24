@@ -96,19 +96,19 @@ class Program
     {
         if (dir == "")
         {
-            AnsiConsole.WriteLine("[red]ERROR --dir option or FACTORIO_DIR environment variable must be set[/]");
+            AnsiConsole.MarkupLine("[red]ERROR --dir option or FACTORIO_DIR environment variable must be set[/]");
             return;
         }
 
         if (username == "")
         {
-            AnsiConsole.WriteLine("[red]ERROR --user option or FACTORIO_USER environment variable must be set[/]");
+            AnsiConsole.MarkupLine("[red]ERROR --user option or FACTORIO_USER environment variable must be set[/]");
             return;
         }
 
         if (token == "")
         {
-            AnsiConsole.WriteLine("[red]ERROR --token option or FACTORIO_TOKEN environment variable must be set[/]");
+            AnsiConsole.MarkupLine("[red]ERROR --token option or FACTORIO_TOKEN environment variable must be set[/]");
             return;
         }
 
@@ -119,13 +119,15 @@ class Program
             .Where(x => x.LocalVersion!.ComparePrecedenceTo(x.LatestVersion) < 0)
             .ToArray();
         
-        AnsiConsole.WriteLine($"[green]Updating {modsToUpdate.Length} mod(s)[/]");
+        AnsiConsole.MarkupLine($"[green]Updating {modsToUpdate.Length} mod(s)[/]");
         
         foreach (var mod in modsToUpdate)
         {
-            AnsiConsole.WriteLine($"[green]Updating {mod.Name} from {mod.LocalVersion} to {mod.LatestVersion}[/]");
-            // await factorioMods.UpdateMod(mod, mod.LatestVersion);
+            AnsiConsole.MarkupLine($"[green]Updating {mod.Name} from {mod.LocalVersion} to {mod.LatestVersion}[/]");
+            await factorioMods.UpdateMod(mod.Name, null);
         }
+        
+        AnsiConsole.MarkupLine("[green]All mods updated[/]");
     }
 
     private static string GetFactorioModDir()

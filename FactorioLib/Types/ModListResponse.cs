@@ -6,5 +6,5 @@ public class ModListResponse
 {
     [JsonPropertyName("pagination")] public Pagination Pagination { get; set; }
 
-    [JsonPropertyName("results")] public List<Result> Results { get; set; } = new();
+    [JsonPropertyName("results")] public List<ModPortalMod> Results { get; set; } = new();
 }
