@@ -16,7 +16,7 @@ class Program
             getDefaultValue: GetUsername);
         var tokenOption = new Option<String>(name: "--token", description: "Token for Factorio mod portal",
             getDefaultValue: GetToken);
-        var dryRun = new Option<Boolean>(name: "--dry-run", description: "Token for Factorio mod portal");
+        var dryRunOption = new Option<Boolean>(name: "--dry-run", description: "Token for Factorio mod portal");
 
         var rootCommand = new RootCommand("Factorio mod utility");
         rootCommand.AddGlobalOption(dirOption);
@@ -26,6 +26,7 @@ class Program
         var updateModsCommand = new Command("update");
         updateModsCommand.AddOption(userNameOption);
         updateModsCommand.AddOption(tokenOption);
+        updateModsCommand.AddOption(dryRunOption);
 
         var listModsCommand = new Command("list");
         modsCommand.AddCommand(updateModsCommand);
@@ -33,7 +34,7 @@ class Program
 
         rootCommand.AddCommand(modsCommand);
         listModsCommand.SetHandler(ListMods, dirOption);
-        updateModsCommand.SetHandler(UpdateMods, dirOption, userNameOption, tokenOption, dryRun);
+        updateModsCommand.SetHandler(UpdateMods, dirOption, userNameOption, tokenOption, dryRunOption);
 
         return rootCommand.InvokeAsync(args).Result;
     }
@@ -104,16 +105,19 @@ class Program
             return;
         }
 
-        if (username == "")
+        if (!dryRun)
         {
-            AnsiConsole.MarkupLine("[red]ERROR --user option or FACTORIO_USER environment variable must be set[/]");
-            return;
-        }
+            if (username == "")
+            {
+                AnsiConsole.MarkupLine("[red]ERROR --user option or FACTORIO_USER environment variable must be set[/]");
+                return;
+            }
 
-        if (token == "")
-        {
-            AnsiConsole.MarkupLine("[red]ERROR --token option or FACTORIO_TOKEN environment variable must be set[/]");
-            return;
+            if (token == "")
+            {
+                AnsiConsole.MarkupLine("[red]ERROR --token option or FACTORIO_TOKEN environment variable must be set[/]");
+                return;
+            }
         }
 
         FactorioMods factorioMods = new FactorioMods(dir, username, token);
@@ -135,6 +139,11 @@ class Program
             }
         }
 
+        if (dryRun)
+        {
+            AnsiConsole.MarkupLine("[darkorange]Dry-Run enabled, mods not updated[/]");
+            return;
+        } 
         AnsiConsole.MarkupLine("[green]All mods updated[/]");
     }
 
