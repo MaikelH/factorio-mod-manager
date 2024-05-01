@@ -2,6 +2,7 @@
 using FactorioLib;
 using FactorioLib.Types;
 using Spectre.Console;
+using Spectre.Console.Rendering;
 
 namespace FactorioModUpdater;
 
@@ -11,8 +12,11 @@ class Program
     {
         var dirOption = new Option<String>(name: "--dir", description: "Factorio mod directory",
             getDefaultValue: GetFactorioModDir);
-        var userNameOption = new Option<String>(name: "--user", description: "Username for Factorio mod portal", getDefaultValue: GetUsername);
-        var tokenOption = new Option<String>(name: "--token", description: "Token for Factorio mod portal", getDefaultValue: GetToken);
+        var userNameOption = new Option<String>(name: "--user", description: "Username for Factorio mod portal",
+            getDefaultValue: GetUsername);
+        var tokenOption = new Option<String>(name: "--token", description: "Token for Factorio mod portal",
+            getDefaultValue: GetToken);
+        var dryRun = new Option<Boolean>(name: "--dry-run", description: "Token for Factorio mod portal");
 
         var rootCommand = new RootCommand("Factorio mod utility");
         rootCommand.AddGlobalOption(dirOption);
@@ -29,7 +33,7 @@ class Program
 
         rootCommand.AddCommand(modsCommand);
         listModsCommand.SetHandler(ListMods, dirOption);
-        updateModsCommand.SetHandler(UpdateMods, dirOption, userNameOption, tokenOption);
+        updateModsCommand.SetHandler(UpdateMods, dirOption, userNameOption, tokenOption, dryRun);
 
         return rootCommand.InvokeAsync(args).Result;
     }
@@ -92,7 +96,7 @@ class Program
         AnsiConsole.Write(table);
     }
 
-    private static async Task UpdateMods(string dir, string username, string token)
+    private static async Task UpdateMods(string dir, string username, string token, Boolean dryRun)
     {
         if (dir == "")
         {
@@ -118,21 +122,25 @@ class Program
         var modsToUpdate = mods.Where(x => x.LocalVersion != null && x.LatestVersion != null)
             .Where(x => x.LocalVersion!.ComparePrecedenceTo(x.LatestVersion) < 0)
             .ToArray();
-        
+
         AnsiConsole.MarkupLine($"[green]Updating {modsToUpdate.Length} mod(s)[/]");
-        
+
         foreach (var mod in modsToUpdate)
         {
             AnsiConsole.MarkupLine($"[green]Updating {mod.Name} from {mod.LocalVersion} to {mod.LatestVersion}[/]");
-            await factorioMods.UpdateMod(mod.Name, null);
+
+            if (!dryRun)
+            {
+                await factorioMods.UpdateMod(mod.Name, null);
+            }
         }
-        
+
         AnsiConsole.MarkupLine("[green]All mods updated[/]");
     }
 
     private static string GetFactorioModDir()
     {
-        var modDir = Environment.GetEnvironmentVariable("FACTORIO_MOD_DIR");
+        var modDir = Environment.GetEnvironmentVariable("FACTORIO_DIR");
         if (modDir != null)
         {
             return modDir;
