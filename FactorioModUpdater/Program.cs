@@ -1,8 +1,6 @@
 ﻿using System.CommandLine;
 using FactorioLib;
-using FactorioLib.Types;
 using Spectre.Console;
-using Spectre.Console.Rendering;
 
 namespace FactorioModUpdater;
 
@@ -16,19 +14,19 @@ class Program
             getDefaultValue: GetUsername);
         var tokenOption = new Option<String>(name: "--token", description: "Token for Factorio mod portal",
             getDefaultValue: GetToken);
-        var dryRunOption = new Option<Boolean>(name: "--dry-run", description: "Token for Factorio mod portal");
+        var dryRunOption = new Option<Boolean>(name: "--dry-run", description: "Only display proposed updated, don't take action");
 
-        var rootCommand = new RootCommand("Factorio mod utility");
+        var rootCommand = new RootCommand("Factorio mod manager");
         rootCommand.AddGlobalOption(dirOption);
 
         var modsCommand = new Command("mod", "Manipulate mods");
 
-        var updateModsCommand = new Command("update");
+        var updateModsCommand = new Command("update", "Update mods in the Factorio mod directory");
         updateModsCommand.AddOption(userNameOption);
         updateModsCommand.AddOption(tokenOption);
         updateModsCommand.AddOption(dryRunOption);
 
-        var listModsCommand = new Command("list");
+        var listModsCommand = new Command("list", "List all mods present in the Factorio mod directory");
         modsCommand.AddCommand(updateModsCommand);
         modsCommand.AddCommand(listModsCommand);
 
