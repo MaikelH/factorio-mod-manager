@@ -16,7 +16,9 @@ There are 2 differennt ways to install: build from source and download the binar
 2. Download the release for your platform (Linux or Windows)
 
 ## Commands
-The tool must know in which directory the mods are stored. This directory can be supplied in two ways the `--dir` argument or the `FACTORIO_DIR` environment variable
+The tool must know in which directory the mods are stored. This directory can be supplied in two ways the `--dir` argument or the `FACTORIO_DIR` environment variable.
+
+When downloading mods (needed for update), a `factorio.com` username and token must be specified. These can be specified by the parameters `--user` and `--token` or the environment variables `FACTORIO_USER` and `FACTORIO_TOKEN`. See the section Downloading mods on the [Mod Portal wiki page](https://wiki.factorio.com/Mod_portal_API#).
 
 ### Root
 ```
@@ -76,7 +78,7 @@ Usage:
 Options:
   --user <user>    Username for Factorio mod portal []
   --token <token>  Token for Factorio mod portal []
-  --dry-run        Token for Factorio mod portal
+  --dry-run        Only display proposed updated, don't take action
   --dir <dir>      Factorio mod directory []
   -?, -h, --help   Show help and usage information
 ```
